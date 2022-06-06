@@ -26,10 +26,10 @@ public class MongoService
         //    cm.AutoMap();
         //    cm.MapIdField(c => c.Id).SetIdGenerator(StringObjectIdGenerator.Instance);
         //});
-        BsonClassMap.RegisterClassMap<Card>(cm => {
-            cm.AutoMap();
-            cm.MapIdField(c => c.Id).SetIdGenerator(StringObjectIdGenerator.Instance);
-        });
+        //BsonClassMap.RegisterClassMap<Card>(cm => {
+        //    cm.AutoMap();
+        //    cm.MapIdField(c => c.Id).SetIdGenerator(StringObjectIdGenerator.Instance);
+        //});
         _client = new MongoClient(connectionString);
     }
 

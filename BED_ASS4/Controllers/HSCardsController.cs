@@ -1,3 +1,4 @@
+using BED_ASS4.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BED_ASS4.Controllers
@@ -18,9 +19,12 @@ namespace BED_ASS4.Controllers
 
         private readonly ILogger<HSCardsController> _logger;
 
-        public HSCardsController(ILogger<HSCardsController> logger)
+        private readonly CardService _cardService;
+
+        public HSCardsController(ILogger<HSCardsController> logger, CardService cardService)
         {
             _logger = logger;
+            _cardService = cardService;
         }
 
         
@@ -74,50 +78,38 @@ namespace BED_ASS4.Controllers
 
 
         [HttpGet("/sets")]
-        public List<Set> GetSets()
+        public async Task<IList<Set>> GetSets()
         {
-
+            _logger.LogInformation("API: Getting all Sets list");
             // Skal returner ALLE sets
-            return new List<Set>()
-            {
-                new Set() { Id = 1, CardCount = 99, Name = "Det vilde set!", Type = "dude" },
-            };
+            return await _cardService.GetAllSets();
         }
 
         
         [HttpGet("/rarities")]
-        public List<Rarity> GetRarity()
+        public async Task<IList<Rarities>> GetAllRarities()
         {
-
-            // Skal returner ALLE rarities
-            return new List<Rarity>()
-            {
-                new Rarity() { Id = 1, Name = "Superrare" },
-            };
+            _logger.LogInformation("API: Getting all Rarities list");
+            // Skal returner ALLE sets
+            return await _cardService.GetAllRarities();
         }
 
-        
+
         [HttpGet("/classes")]
-        public List<Class> GetClasses()
+        public async Task<IList<Class>> GetAllClasses()
         {
-
+            _logger.LogInformation("API: Getting all Classes list");
             // Skal returner ALLE sets
-            return new List<Class>()
-            {
-                new Class(){ Id = 1, Name = "Klassekort"},
-            };
+            return await _cardService.GetAllClasses();
         }
 
-        
-        [HttpGet("/types")]
-        public List<CardType> GetTypes()
-        {
 
+        [HttpGet("/types")]
+        public async Task<IList<CardType>> GetAllTypes()
+        {
+            _logger.LogInformation("API: Getting all Types list");
             // Skal returner ALLE sets
-            return new List<CardType>()
-            {
-                new CardType(){ Id = 1, Name = "Typeofcard..." },
-            };
+            return await _cardService.GetAllTypes();
         }
     }
 }

@@ -3,21 +3,11 @@ using BED_ASS4.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
-// Add services to the container.
 builder.Services.AddSingleton<MongoService>(s => new MongoService(builder.Configuration.GetConnectionString("Localhost")));
 builder.Services.AddSingleton<CardService>();
-// builder.Services.AddSingleton<DecksService>();
-builder.Services.AddControllers();
-
-
 builder.Services.AddControllers();
 
 var app = builder.Build();
-
-
-
-
 
 using (var scope = app.Services.CreateScope())
 {
@@ -26,8 +16,10 @@ using (var scope = app.Services.CreateScope())
     if (!await cardService.IsSeeded())
     {
         // Linjen her, skal kommenteres ind, for at teste SEED.
-        //cardService.SeedCards(new[] { "cards.json", "metadata.json" });
+        cardService.SeedCards();
     }
+
+    
 }
 // Configure the HTTP request pipeline.
 
