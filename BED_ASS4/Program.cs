@@ -15,11 +15,8 @@ using (var scope = app.Services.CreateScope())
     var cardService = services.GetRequiredService<CardService>();
     if (!await cardService.IsSeeded())
     {
-        // Linjen her, skal kommenteres ind, for at teste SEED.
         cardService.SeedCards();
     }
-
-    
 }
 // Configure the HTTP request pipeline.
 

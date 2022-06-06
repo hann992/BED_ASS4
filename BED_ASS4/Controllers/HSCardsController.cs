@@ -29,51 +29,24 @@ namespace BED_ASS4.Controllers
 
         
         [HttpGet("/cards")]
-        public IEnumerable<Card> Get(int? page,  int? setid, string? artist, int? classid, int? rarityid)
+        public async Task<IList<CardsDTO>> GetAsync(int? typeid = null, int? setid = null, int? classid = null, int? rarityid = null, string? artist = null, int? page = null)
         {
-            _logger.LogInformation("API: Performing search, Requesting page: {page}, id: {setid}, artist: {artist}", page, setid, artist, classid, rarityid);
 
-            // Hvis ingen side valgt, så side 1!
-            if(page != null)
+            var searchResults = await _cardService.Search(setid, classid, rarityid, typeid, artist, page);
+
+            List<CardsDTO> cardsReturned = new List<CardsDTO>();
+
+            foreach(var card in searchResults)
             {
-                Page = (int)page;
-            }
-            else
-            {
-                Page = 1;
+                cardsReturned.Add( await _cardService.GetCardWithMeta(card) );
             }
 
-            // Hvis brugt, så sæt...
-            if (setid != null)
-            {
-                SetId = (int)setid;
-            }
 
-            if (artist != null)
-            {
-                Artist = (string)artist;
-            }
 
-            if (classid != null)
-            {
-                ClassId = (int)classid;
-            }
 
-            if (rarityid != null)
-            {
-                RarityId = (int)rarityid;
-            }
+            Console.WriteLine("Counting new cards: " + cardsReturned.Count());
 
-            // Returner input, som test...
-            return Enumerable.Range(1, 1).Select(index => new Card
-            {
-                Id = SetId,
-                Artist = Artist,
-                ClassId = ClassId,
-                RarityId = RarityId,
-
-            })
-            .ToArray();
+            return cardsReturned;
         }
 
 

@@ -27,20 +27,40 @@ public class CardService
         _RaritiesCollection = service.Client.GetDatabase("mtg").GetCollection<Rarities>("rarities");
     }
 
-    public async Task<IList<Card>> Search(string? setid = null, string? artist = null, int? page = null)
+    public async Task<IList<Card>> Search(int? setid = null, int? classid = null, int? rarityid = null, int? typeid = null, string? artist = null, int? page = null)
     {
         var builder = Builders<Card>.Filter;
         var filter = builder.Empty;
-        var limit = 50;
+        var limit = 100;
 
-        if (setid?.Length > 0)
+        if (classid != null)
         {
-            filter &= builder.Regex(x => x.SetId, new BsonRegularExpression($"/{setid}/i"));
+            filter &= builder.Eq(x => x.ClassId, classid);
+        }
+
+        if (typeid != null)
+        {
+            filter &= builder.Eq(x => x.TypeId, typeid);
+        }
+
+        if (rarityid != null)
+        {
+            filter &= builder.Eq(x => x.RarityId, rarityid);
+        }
+
+        if (setid != null)
+        {
+            filter &= builder.Eq(x => x.SetId, setid);
         }
 
         if (artist?.Length > 0)
         {
             filter &= builder.Regex(x => x.Artist, new BsonRegularExpression($"/{artist}/i"));
+        }
+
+        if(page == null)
+        {
+            page = 0;
         }
 
         var result = _collection.Find<Card>(filter);
@@ -51,12 +71,36 @@ public class CardService
             result = result.Skip(page * limit).Limit(limit);
         }
 
-        return await result.ToListAsync<Card>();
+        
+
+        Console.WriteLine("Found " + result.Count());
+
+        return await result.ToListAsync();
     }
 
-    public async Task<IList<Card>> GetAllCards()
+    public async Task<CardsDTO> GetCardWithMeta(Card card)
     {
-        return await _collection.Find<Card>(Builders<Card>.Filter.Empty).ToListAsync();
+
+        CardsDTO newCard = new CardsDTO();
+
+        newCard.Attack = card.Attack;
+        newCard.Health = card.Health;
+        newCard.Name = card.Name;
+        newCard.FlavorText = card.FlavorText;
+        newCard.Id = card.Id;
+        newCard.SpellSchoolId = card.SpellSchoolId;
+        newCard.Artist = card.Artist;
+        newCard.ManaCost = card.ManaCost;
+
+
+        newCard.Set = _SetCollection.Find<Set>(x => x.Id == card.SetId).FirstOrDefault().Name;
+        newCard.ClassType = _ClassCollection.Find<Class>(x => x.Id == card.ClassId).FirstOrDefault().Name;
+        newCard.Rarity = _RaritiesCollection.Find<Rarities>(x => x.Id == card.RarityId).FirstOrDefault().Name;
+        newCard.Type = _TypeCollection.Find<CardType>(x => x.Id == card.TypeId).FirstOrDefault().Name;
+
+
+
+        return newCard;
     }
 
     public async Task<IList<Set>> GetAllSets()

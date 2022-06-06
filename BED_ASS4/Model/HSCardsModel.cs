@@ -6,7 +6,9 @@ namespace BED_ASS4
 {
 	public class Card
 	{
-
+		[BsonId]
+		[BsonRepresentation(BsonType.ObjectId)]
+		public string _id { get; set; }
 		public int Id { get; set; }
 		[JsonPropertyName("ClassId")]
 		public int ClassId { get; set; }
@@ -32,6 +34,9 @@ namespace BED_ASS4
 
 	public class Set
 	{
+		[BsonId]
+		[BsonRepresentation(BsonType.ObjectId)]
+		public string _id { get; set; }
 		public int Id { get; set; }
 		public string Name { get; set; }
 		public string Type { get; set; }
@@ -44,12 +49,18 @@ namespace BED_ASS4
 
 	public class CardType
 	{
+		[BsonId]
+		[BsonRepresentation(BsonType.ObjectId)]
+		public string _id { get; set; }
 		public int Id { get; set; }
 		public string Name { get; set; }
 	}
 
 	public class Class
 	{
+		[BsonId]
+		[BsonRepresentation(BsonType.ObjectId)]
+		public string _id { get; set; }
 		public int Id { get; set; }
 		public string Name { get; set; }
 	}
@@ -57,10 +68,14 @@ namespace BED_ASS4
 
 	public class Rarities
 	{
+		[BsonId]
+		[BsonRepresentation(BsonType.ObjectId)]
+		public string _id { get; set; }
 		public int Id { get; set; }
 		public string Name { get; set; }
 	}
 
+	// DTO til at få Json filen ind som flere forskellige lister
 	public class Metadata
     {
 		public List<Set> Sets { get; set; }
@@ -71,5 +86,27 @@ namespace BED_ASS4
 
 		public List<CardType> Types { get; set; }
     }
+
+	public class CardsDTO
+    {
+		public int Id { get; set; }
+		[JsonPropertyName("class")]
+		public string ClassType { get; set; }
+		public string Type { get; set; }
+		public string Set { get; set; }
+		public int? SpellSchoolId { get; set; }
+		public string Rarity { get; set; }
+		public int? Health { get; set; }
+		public int? Attack { get; set; }
+		public int ManaCost { get; set; }
+		[JsonPropertyName("ArtistName")]
+		public string Artist { get; set; }
+		public string Text { get; set; }
+		public string FlavorText { get; set; }
+		public string Name { get; set; }
+
+	}
+
+
 
 }
