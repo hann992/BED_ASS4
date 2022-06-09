@@ -58,22 +58,18 @@ public class CardService
             filter &= builder.Regex(x => x.Artist, new BsonRegularExpression($"/{artist}/i"));
         }
 
-        if(page == null)
-        {
-            page = 0;
-        }
-
         var result = _collection.Find<Card>(filter);
         var count = await result.CountDocumentsAsync();
 
-        if (await result.CountDocumentsAsync() >= limit)
+
+        // Hvis Page er brugt, så laver vi pagination, ellers gør vi ikke.
+        if (page != null)
         {
-            result = result.Skip(page * limit).Limit(limit);
+            if (await result.CountDocumentsAsync() >= limit)
+            {
+                result = result.Skip(page * limit).Limit(limit);
+            }
         }
-
-        
-
-        Console.WriteLine("Found " + result.Count());
 
         return await result.ToListAsync();
     }
@@ -92,7 +88,7 @@ public class CardService
         newCard.Artist = card.Artist;
         newCard.ManaCost = card.ManaCost;
 
-
+        // Erstatning af IDs med deres Names:
         newCard.Set = _SetCollection.Find<Set>(x => x.Id == card.SetId).FirstOrDefault().Name;
         newCard.ClassType = _ClassCollection.Find<Class>(x => x.Id == card.ClassId).FirstOrDefault().Name;
         newCard.Rarity = _RaritiesCollection.Find<Rarities>(x => x.Id == card.RarityId).FirstOrDefault().Name;

@@ -41,10 +41,7 @@ namespace BED_ASS4.Controllers
                 cardsReturned.Add( await _cardService.GetCardWithMeta(card) );
             }
 
-
-
-
-            Console.WriteLine("Counting new cards: " + cardsReturned.Count());
+            _logger.LogInformation("API: Getting Card search with {0} results", cardsReturned.Count());
 
             return cardsReturned;
         }

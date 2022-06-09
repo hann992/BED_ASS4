@@ -12,7 +12,7 @@
     "BED_ASS4": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "",
       "applicationUrl": "https://localhost:5000",
       "environmentVariables": {

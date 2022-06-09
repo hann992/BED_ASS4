@@ -20,16 +20,6 @@ public class MongoService
 
     public MongoService(string connectionString)
     {
-        // Vi laver ikke decks i denne version!
-        //BsonClassMap.RegisterClassMap<Deck>(cm =>
-        //{
-        //    cm.AutoMap();
-        //    cm.MapIdField(c => c.Id).SetIdGenerator(StringObjectIdGenerator.Instance);
-        //});
-        //BsonClassMap.RegisterClassMap<Card>(cm => {
-        //    cm.AutoMap();
-        //    cm.MapIdField(c => c.Id).SetIdGenerator(StringObjectIdGenerator.Instance);
-        //});
         _client = new MongoClient(connectionString);
     }
 
